@@ -1,6 +1,6 @@
 # TextEditor
 
-This README outlines the details of collaborating on this Ember addon.
+A text editor component for Ember CLI that uses contenteditable.
 
 ## Installation
 
@@ -22,4 +22,5 @@ This README outlines the details of collaborating on this Ember addon.
 
 * `ember build`
 
-For more information on using ember-cli, visit [http://www.ember-cli.com/](http://www.ember-cli.com/).
+For more information on using ember-cli, visit
+[http://www.ember-cli.com/](http://www.ember-cli.com/).
