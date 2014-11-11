@@ -153,7 +153,7 @@ export default Ember.Component.extend({
     var sections      = this.get('sections');
     var backspaceCode = 8;
 
-    if (sections.length > 1) { return; }
+    if (sections.length > 1 || !activeSection) { return; }
 
     if (e.keyCode === backspaceCode && activeSection.innerHTML === '<br>') {
       e.preventDefault();
