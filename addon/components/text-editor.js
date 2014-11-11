@@ -1,5 +1,9 @@
 import Ember from 'ember';
 
+/**
+ * @class TextEditorComponent
+ * @extends Ember.Component
+ */
 export default Ember.Component.extend({
   classNames: ['TextEditor'],
   attributeBindings: ['contenteditable'],
@@ -81,6 +85,7 @@ export default Ember.Component.extend({
     return function onKeydown(e) {
       this.setActiveSection();
       this.preventEmpty(e);
+      this.insertTab(e);
     }.bind(this);
   }.property(),
 
@@ -119,6 +124,7 @@ export default Ember.Component.extend({
     elem.addEventListener('focus',     onFocus);
     elem.addEventListener('blur',      onBlur);
     elem.addEventListener('keydown',   onKeydown);
+    elem.addEventListener('keyup',     onKeydown);
     elem.addEventListener('mousedown', onFocus);
     elem.addEventListener('paste',     onPaste);
   }.on('didInsertElement'),
@@ -138,9 +144,28 @@ export default Ember.Component.extend({
     elem.removeEventListener('focus',     onFocus);
     elem.removeEventListener('blur',      onBlur);
     elem.removeEventListener('keydown',   onKeydown);
+    elem.removeEventListener('keyup',     onKeydown);
     elem.removeEventListener('mousedown', onFocus);
     elem.removeEventListener('paste',     onPaste);
   }.on('willDestroyElement'),
+
+  /**
+   * Insert 2 spaces if the user types the "tab" key.
+   *
+   * @method insertTab
+   * @param {Event} e the event that was fired
+   */
+  insertTab: function(e) {
+    var activeSection = this.get('activeSection');
+    var tabCode       = 9;
+
+    if (!activeSection) { return; }
+
+    if (e.keyCode === tabCode) {
+      e.preventDefault();
+      document.execCommand('insertText', false, '  ');
+    }
+  },
 
   /**
    * Prevent the last section from being deleted.
