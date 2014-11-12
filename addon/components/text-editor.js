@@ -90,6 +90,19 @@ export default Ember.Component.extend({
   }.property(),
 
   /**
+   * A method to be called when the "keyup" event is fired
+   *
+   * @property onKeyup
+   * @type {Function}
+   */
+  onKeyup: function() {
+    return function onKeyup(e) {
+      this.setActiveSection();
+      this.preventEmpty(e);
+    }.bind(this);
+  }.property(),
+
+  /**
    * A method to be called when the "paste" event is fired
    *
    * It will cancel the default paste action and insert plain text from the
@@ -117,6 +130,7 @@ export default Ember.Component.extend({
   bindDOMEvents: function() {
     var elem      = this.get('elem');
     var onKeydown = this.get('onKeydown').bind(this);
+    var onKeyup   = this.get('onKeyup').bind(this);
     var onFocus   = this.get('onFocus').bind(this);
     var onBlur    = this.get('onBlur').bind(this);
     var onPaste   = this.get('onPaste').bind(this);
@@ -124,7 +138,7 @@ export default Ember.Component.extend({
     elem.addEventListener('focus',     onFocus);
     elem.addEventListener('blur',      onBlur);
     elem.addEventListener('keydown',   onKeydown);
-    elem.addEventListener('keyup',     onKeydown);
+    elem.addEventListener('keyup',     onKeyup);
     elem.addEventListener('mousedown', onFocus);
     elem.addEventListener('paste',     onPaste);
   }.on('didInsertElement'),
@@ -137,6 +151,7 @@ export default Ember.Component.extend({
   unbindDOMEvents: function() {
     var elem      = this.get('elem');
     var onKeydown = this.get('onKeydown').bind(this);
+    var onKeyup   = this.get('onKeyup').bind(this);
     var onFocus   = this.get('onFocus').bind(this);
     var onBlur    = this.get('onBlur').bind(this);
     var onPaste   = this.get('onPaste').bind(this);
@@ -144,7 +159,7 @@ export default Ember.Component.extend({
     elem.removeEventListener('focus',     onFocus);
     elem.removeEventListener('blur',      onBlur);
     elem.removeEventListener('keydown',   onKeydown);
-    elem.removeEventListener('keyup',     onKeydown);
+    elem.removeEventListener('keyup',     onKeyup);
     elem.removeEventListener('mousedown', onFocus);
     elem.removeEventListener('paste',     onPaste);
   }.on('willDestroyElement'),
