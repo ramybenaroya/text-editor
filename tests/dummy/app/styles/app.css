@@ -15,6 +15,6 @@ html, body {
   border: 1px solid blue;
 }
 
-.TextEditor :not(.active-section) {
+.TextEditor .document-section:not(.active-section) {
   border: 1px solid gray;
 }
