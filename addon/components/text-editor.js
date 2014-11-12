@@ -255,6 +255,8 @@ export default Ember.Component.extend({
 
       if (focusedNode) {
         focusedNode.classList.add('active-section');
+      } else {
+        this.focusSection(this.get('sections.firstObject'));
       }
     }.bind(this));
   },
