@@ -83,6 +83,7 @@ export default Ember.Component.extend({
    */
   onKeydown: function() {
     return function onKeydown(e) {
+      this.newSection(e);
       this.setActiveSection();
       this.preventEmpty(e);
       this.insertTab(e);
@@ -163,6 +164,28 @@ export default Ember.Component.extend({
     elem.removeEventListener('mousedown', onFocus);
     elem.removeEventListener('paste',     onPaste);
   }.on('willDestroyElement'),
+
+  /**
+   * Append a new section and focus on it.
+   *
+   * This must be done manually, because the browser will insert two empty
+   * sections if there is an element node focused on by the browser when the
+   * user hits `return`.
+   *
+   * @method newSection
+   * @param {Event} e the event fired
+   */
+  newSection: function(e) {
+    var isReturn = e.keyCode === 13 || // "return" key
+      (e.keyCode === 77 && e.ctrlKey); // ^m
+
+    if (isReturn) {
+      e.preventDefault();
+
+      var section = this.appendSection();
+      this.focusSection(section);
+    }
+  },
 
   /**
    * Insert 2 spaces if the user types the "tab" key.
