@@ -8,6 +8,7 @@ export default Ember.Component.extend({
   classNames: ['TextEditor'],
   attributeBindings: ['contenteditable'],
   contenteditable: 'true',
+  text: '',
 
   /**
    * The DOM element that contains this component
@@ -26,10 +27,10 @@ export default Ember.Component.extend({
    * @type {Array(String)}
    */
   paragraphs: function() {
-    return this.get('text').split('\n').map(function addBreaks(str) {
+    return this.get('_text').split('\n').map(function addBreaks(str) {
       return str || new Ember.Handlebars.SafeString('<br>');
     });
-  }.property('text'),
+  }.property('_text'),
 
   /**
    * The sections of the document as HTMLDivElements
@@ -60,6 +61,7 @@ export default Ember.Component.extend({
   onBlur: function() {
     return function onBlur() {
       this.unsetActiveSection();
+      this.updateText();
     }.bind(this);
   }.property(),
 
@@ -72,6 +74,7 @@ export default Ember.Component.extend({
   onFocus: function() {
     return function onFocus() {
       this.setActiveSection();
+      this.updateText();
     }.bind(this);
   }.property(),
 
@@ -86,6 +89,7 @@ export default Ember.Component.extend({
       this.setActiveSection();
       this.preventEmpty(e);
       this.insertTab(e);
+      this.updateText();
     }.bind(this);
   }.property(),
 
@@ -99,6 +103,7 @@ export default Ember.Component.extend({
     return function onKeyup(e) {
       this.setActiveSection();
       this.preventEmpty(e);
+      this.updateText();
     }.bind(this);
   }.property(),
 
@@ -119,6 +124,7 @@ export default Ember.Component.extend({
       if (text) {
         document.execCommand('insertText', false, text);
       }
+      this.updateText();
     }.bind(this);
   }.property(),
 
@@ -305,5 +311,27 @@ export default Ember.Component.extend({
 
     sel.removeAllRanges();
     sel.addRange(range);
-  }
+  },
+
+  /**
+   * Update the bounded text property
+   *
+   * @method updateText
+   */
+  updateText: function(){
+    var texts = []
+    this.$('.document-section').each(function(i, section){
+      texts.push(Ember.$(section).text());
+    });
+    texts = texts.join('\n');
+    this.set('text', texts);
+  },
+  /**
+   * When the element is first inserted, set the private _text field
+   *
+   * @method setInitialText
+   */
+  setInitialText: function(){
+    this.set('_text', this.get('text'));
+  }.on('init')
 });
