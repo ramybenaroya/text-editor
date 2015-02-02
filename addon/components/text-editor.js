@@ -7,7 +7,10 @@ import Ember from 'ember';
 export default Ember.Component.extend({
   classNames: ['TextEditor'],
   attributeBindings: ['contenteditable'],
-  contenteditable: 'true',
+  contenteditable: function(){
+    return (!!this.get('editable')).toString()
+  }.property('editable'),
+  editable: true,
   text: '',
 
   /**
