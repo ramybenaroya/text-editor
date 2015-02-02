@@ -264,8 +264,12 @@ export default Ember.Component.extend({
    * @method didInsertElement
    */
   didInsertElement: function() {
-    var sections = this.get('sections');
-    this.focusSection(sections[sections.length - 1]);
+    var sections = this.get('sections'),
+      contenteditable = this.get('contenteditable');
+      contenteditable = contenteditable && contenteditable !== "false";
+    if (contenteditable){
+      this.focusSection(sections[sections.length - 1]);
+    }
   },
 
   /**
